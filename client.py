@@ -12,11 +12,10 @@ print("Host:", HOST)
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((HOST, PORT))
-    #s.sendall(b'Hello, world')
     while True:
         print("-------------------------------")
         try:
-            msg = input("Expressão inFixa: ");
+           msg = input("Expressão inFixa: ");
         except: break
         s.sendall(str.encode(msg))
         
