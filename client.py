@@ -14,12 +14,17 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((HOST, PORT))
     #s.sendall(b'Hello, world')
     while True:
+        print("-------------------------------")
         try:
-            msg = input("Message: ");
+            msg = input("Expressão inFixa: ");
         except: break
         s.sendall(str.encode(msg))
+        
+        try:
+            formato=input("preFixa ou posFixa or exit: ")
+        except: break
+        s.sendall(str.encode(formato))
+
         data = s.recv(1024)
-        # EU ALTEREI
-        #print("Received", repr(data))
         dados=data.decode()
-        print("Received",dados)
+        print("Expressão Modificada: ",dados)
