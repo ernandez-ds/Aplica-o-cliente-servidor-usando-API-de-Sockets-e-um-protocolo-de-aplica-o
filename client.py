@@ -27,3 +27,4 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         data = s.recv(1024)
         dados=data.decode()
         print("Expressão Modificada: ",dados)
+
