@@ -16,7 +16,7 @@
 	
     4. Caso a solicitação seja “exit”, o servidor fechará seu lado de conexão com o cliente.
 	
-    O servidor continuará em listen, aguardando novas conexões, até que se encerre a aplicação com Ctrl + z.
+    O servidor continuará em listen, aguardando novas conexões, até que se encerre a aplicação com Ctrl + c.
 """
 
 import socket
@@ -39,25 +39,29 @@ try:
         print("Processo filho:", newpid)
         if(newpid == 0):
             tcp.close()
-            print("Conectado pelo cliente: ",addr)
+            print("Conectado pelo cliente:",addr)
             while True:
-                data1 = conn.recv(1024) # Primeiro dado recebido, expressão infixa 
-                dado = data1.decode()
-                if (dado=='exit' or dado==''):
-                    print("Fechada a conexão com o cliente; ",addr)
+                msg1 = conn.recv(1024) # Primeira mensagem recebida, expressão infixa 
+                dado = msg1.decode()
+                print("Cliente:",addr,", mensagem-1:",dado) ### Exibindo mensagem-1 do cliente
+                if (dado=='exit'):
+                    print("Fechada a conexão com o cliente:",addr)
                     conn.close()
                     os._exit(0)
                 else:
                     exp=Expressao(dado)
-                    
-                data2 = conn.recv(1024) # Segundo dado recebido, o método
-                metodo = data2.decode().upper()
-                if(metodo=="POSFIXA"):
+                                        
+                msg2 = conn.recv(1024) # Segunda mensagem recebida, o método
+                metodo = msg2.decode().lower()
+                print("Cliente:",addr,", mensagem-2:",metodo) ### Exibindo mensagem-2 do cliente
+                if(metodo=="posfixa"):
                     ExpConvertida=exp.posFixa()
-                    conn.sendall(ExpConvertida.encode()) # Envia dado Posfixa para o cliente
-                if(metodo=="PREFIXA"):
+                    conn.send(ExpConvertida.encode()) # Envia dado Posfixa para o cliente
+                if(metodo=="prefixa"):
                     ExpConvertida=exp.preFixa()
-                    conn.sendall(ExpConvertida.encode()) # Envia dado Prefixa para o cliente
+                    conn.send(ExpConvertida.encode()) # Envia dado Prefixa para o cliente
+                
+                print("Servidor ao Cliente:",addr,", mensagem-3:",ExpConvertida) ### Exibindo mensagem-3 do Servidor
         else:
             conn.close()
 except KeyboardInterrupt:

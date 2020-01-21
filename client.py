@@ -42,19 +42,24 @@ try:
                 assert op=="1" or op=="2"
             
                 if (op == "1"):
-                    msg = input("\nDigite a Expressão InFixa: ")            
-                    s.sendall(str.encode(msg))
+                    msg1 = input("\nDigite a Expressão InFixa: ")            
+                    s.send(msg1.encode())
                 
+                    #msg2
                     formato=input("preFixa ou posFixa: ")
-                    s.sendall(str.encode(formato))
+                    s.send(formato.encode())
                 
+                    #msg3
                     data = s.recv(1024)
                     dados=data.decode()
                     print("Expressão Modificada: ",dados)
                 elif (op == "2"):
+                    s.send(str.encode('exit'))
                     s.close()
                     break
             except AssertionError:
+                print('\nOpção inválida. Tente uma opção do menu!')
+            except KeyboardInterrupt:
                 print('\nOpção inválida. Tente uma opção do menu!')
 
 except KeyboardInterrupt:
